@@ -5,7 +5,7 @@ from ..models import ComplaintSubmissionIn
 from ..db import db
 from ..validators import LocationParser
 from ..sla_manager import SLAManager
-from ..antigravity_client import AntigravityAPIClient
+from ..telemetry_client import TelemetryClient
 
 router = APIRouter(prefix="/api/v1/citizen", tags=["Citizen"])
 
@@ -41,7 +41,7 @@ def submit_complaint(payload: ComplaintSubmissionIn):
 
     db.complaints[complaint_id] = complaint_record
 
-    client = AntigravityAPIClient(project_id="cleanconnect-sih")
+    client = TelemetryClient(project_id="cleanconnect-sih")
     log_msg = f"Complaint {complaint_id} filed by {payload.citizen_id}. SLA active until {sla_time['deadline_at']}."
     try:
         for _ in client.log_operations(log_msg):

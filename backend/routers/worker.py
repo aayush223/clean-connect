@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException
 from ..models import ResolutionSubmissionIn
 from ..db import db
 from ..sla_manager import SLAManager
-from ..antigravity_client import AntigravityAPIClient
+from ..telemetry_client import TelemetryClient
 
 router = APIRouter(prefix="/api/v1/worker", tags=["Worker"])
 
@@ -55,7 +55,7 @@ def resolve_complaint(complaint_id: str, payload: ResolutionSubmissionIn):
     complaint["completed_at"] = completed_time
     complaint["proof_image_url"] = f"https://s3.ap-south-1.amazonaws.com/sih-cleanconnect/proof-{complaint_id}.png"
 
-    client = AntigravityAPIClient(project_id="cleanconnect-sih")
+    client = TelemetryClient(project_id="cleanconnect-sih")
     sla_status = "compliant" if is_compliant else "non-compliant (SLA Breached)"
     log_msg = f"Task {complaint_id} resolved by {payload.worker_id}. Resolution state: {sla_status}."
     try:

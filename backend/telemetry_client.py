@@ -6,10 +6,10 @@ import urllib.request
 import urllib.error
 from typing import Dict, Any, Generator
 
-# Default credential location for the Antigravity workspace
-DEFAULT_ACCOUNTS_PATH = os.path.expanduser("~/.config/opencode/antigravity-accounts.json")
+# Default credential location for the Telemetry workspace
+DEFAULT_ACCOUNTS_PATH = os.path.expanduser("~/.config/opencode/telemetry-accounts.json")
 
-class AntigravityAPIClient:
+class TelemetryClient:
     """
     Direct client for managing asynchronous telemetry audits and developer-focused SSE streams.
     Implements normalization and exponential backoff for HTTP 429.
@@ -24,7 +24,7 @@ class AntigravityAPIClient:
         stripped = name.lower()
         if stripped.startswith("google/"):
             stripped = stripped[7:]
-        elif stripped.startswith("antigravity-"):
+        elif stripped.startswith("telemetry-"):
             stripped = stripped[12:]
 
         mapping = {
@@ -49,7 +49,7 @@ class AntigravityAPIClient:
         return "fallback_developer_token"
 
     def build_request_envelope(self, prompt: str) -> Dict[str, Any]:
-        """Constructs the standard top-level Antigravity JSON envelope."""
+        """Constructs the standard top-level Telemetry JSON envelope."""
         return {
             "project": self.project_id,
             "model": self.normalized_model_id,
@@ -71,7 +71,7 @@ class AntigravityAPIClient:
 
     def log_operations(self, msg: str, max_retries: int = 5) -> Generator[str, None, None]:
         """Sends streaming audit updates with randomized backoff on HTTP 429 throttling."""
-        url = "https://antigravity.googleapis.com/v1/projects/-/models:streamGenerateContent"
+        url = "https://telemetry.googleapis.com/v1/projects/-/models:streamGenerateContent"
         payload = json.dumps(self.build_request_envelope(msg)).encode("utf-8")
         headers = {
             "Content-Type": "application/json",
@@ -110,4 +110,4 @@ class AntigravityAPIClient:
                     raise err
             except Exception as err:
                 raise err
-        raise RuntimeError("Antigravity connection exhausted.")
+        raise RuntimeError("Telemetry connection exhausted.")

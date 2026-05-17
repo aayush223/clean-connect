@@ -8,13 +8,13 @@
 - **Strict SLA Enforcement**: A rigid 36-hour resolution window for citizen complaints, automatically managed and monitored.
 - **Geospatial Intelligence**: Verification of GPS EXIF data from uploaded complaint images, displayed instantly on Leaflet-powered maps.
 - **Offline-First PWA & Real-time Notifications**: Utilizes Firebase Cloud Messaging (FCM) Service Workers for offline capabilities and prompt job assignments.
-- **Telemetry & AI Auditing**: Deep integration with the Antigravity Nexus API for asynchronous telemetry audits and AI-driven system health checks.
+- **Telemetry & AI Auditing**: Deep integration with the Telemetry API for asynchronous telemetry audits and AI-driven system health checks.
 
 ## 🧠 Core Logics
 
 - **Location Parsing & Verification**: Extracting and validating EXIF metadata directly from base64 encoded photo uploads to verify the authenticity of a complaint's location.
 - **SLA Management (`SLAManager`)**: Time-series monitoring that enforces the 36-hour resolution timeline and tags complaints as compliant or non-compliant.
-- **Resilient AI Telemetry Client**: A custom API client (`AntigravityAPIClient`) for telemetry streaming that implements token normalization, streaming Server-Sent Events (SSE) parsing, and robust error handling.
+- **Resilient AI Telemetry Client**: A custom API client (`TelemetryClient`) for telemetry streaming that implements token normalization, streaming Server-Sent Events (SSE) parsing, and robust error handling.
 
 ## 🧮 Mathematical Implementations
 
@@ -24,7 +24,8 @@
 
 ## 🔑 API Keys & Configurations
 
-- **Antigravity API Credentials**: Requires an OAuth credential/token file at `~/.config/opencode/antigravity-accounts.json`. It securely extracts the `access_token` to interact with Claude/Gemini telemetry endpoints.
+- **Telemetry API Credentials**: Requires an OAuth credential/token file at `~/.config/opencode/telemetry-accounts.json`. It securely extracts the `access_token` to interact with Claude/Gemini telemetry endpoints.
+- **Mappls API**: Utilizes Mappls (MapmyIndia) APIs for precise map rendering, routing, and reverse geocoding location services.
 - **Firebase Configuration**: Relies on FCM integration (`firebase-messaging-sw.js` & Firebase SDK) to enable push notifications and offline caching.
 
 ## 🛠️ Modules & Libraries
@@ -32,7 +33,7 @@
 **Backend (Python/FastAPI):**
 - `fastapi` - High performance async API framework
 - `pydantic` (V2) - Data validation and settings management using python type annotations
-- `urllib` - Native HTTP request handling for the Antigravity Client
+- `urllib` - Native HTTP request handling for the Telemetry Client
 - `datetime`, `time`, `random`, `json` - Standard Python libraries for timing, math, and parsing
 - Mock Database State utilizing Python `Dict` and `List` objects for rapid prototyping without overhead.
 
