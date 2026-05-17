@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Connect | Smart India Waste Management</title>
+    <meta name="description" content="An integrated, role-based cyber-physical platform designed to optimize municipal waste management.">
+    <link rel="stylesheet" href="css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <div class="hero-bg"></div>
+    <div class="glass-overlay"></div>
+    
+    <header class="navbar">
+        <div class="logo">
+            <span class="icon">♻️</span> Clean Connect
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#impact">Impact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="landing-content">
+        <section class="hero">
+            <h1 class="hero-title">Smart India Hackathon<br><span class="highlight">Waste Management Platform</span></h1>
+            <p class="hero-subtitle">Connecting Citizens, Sanitation Workers, and Administrators into a unified, responsive ecosystem with strict 36-hour resolution deadlines.</p>
+            
+            <div class="stats-row">
+                <div class="stat-card glass-card">
+                    <h2>98%</h2>
+                    <p>Cleanup Rate</p>
+                </div>
+                <div class="stat-card glass-card">
+                    <h2>36hr</h2>
+                    <p>Resolution SLA</p>
+                </div>
+                <div class="stat-card glass-card">
+                    <h2>5k+</h2>
+                    <p>Active Smart Bins</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="gateways" id="gateways">
+            <h2 class="section-title">Select Your Portal</h2>
+            <div class="cards-container">
+                <!-- Citizen Card -->
+                <div class="role-card glass-card hover-glow" onclick="openPortal('citizen')">
+                    <div class="card-icon citizen-icon">👥</div>
+                    <h3>Citizen Access</h3>
+                    <p>Report issues, track smart bins, and view local municipal directories with offline-first capabilities.</p>
+                    <button class="btn btn-primary">Enter Portal</button>
+                </div>
+
+                <!-- Worker Card -->
+                <div class="role-card glass-card hover-glow" onclick="openPortal('worker')">
+                    <div class="card-icon worker-icon">👷</div>
+                    <h3>Worker Portal</h3>
+                    <p>Receive SLA-bound job notifications, navigate offline, and upload proof of resolution.</p>
+                    <button class="btn btn-secondary">Access Dashboard</button>
+                </div>
+
+                <!-- Admin Card -->
+                <div class="role-card glass-card hover-glow" onclick="openPortal('admin')">
+                    <div class="card-icon admin-icon">🖥️</div>
+                    <h3>Municipal Admin</h3>
+                    <p>Monitor SLA compliance, track city-wide analytics, and audit global sanitation fleets.</p>
+                    <button class="btn btn-accent">System Control</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Portal Modal -->
+    <div id="portalModal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Portal Access</h2>
+            <form id="authForm">
+                <div class="input-group">
+                    <label for="username">Username / Phone</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Authenticate via PWA</button>
+            </form>
+            <div id="authStatus" class="status-msg"></div>
+        </div>
+    </div>
+
+    <!-- Citizen Portal Container -->
+    <div id="citizenPortal" class="portal-view citizen-light-theme" style="display: none;">
+        <div class="citizen-app-container">
+            <header class="citizen-header">
+                <h2>Citizen Dashboard</h2>
+                <button class="btn-text" onclick="closeAppPortal()">Logout</button>
+            </header>
+
+            <div class="citizen-scroll-content">
+                <!-- Map / Live Truck Location Card -->
+                <div class="citizen-card">
+                    <h3 class="card-title">Live Truck Location</h3>
+                    <div id="citizenMap" style="height: 180px; border-radius: 8px; margin-top: 10px; margin-bottom: 10px;"></div>
+                    <p class="card-subtitle">Next collection: Today 2:30 PM</p>
+                </div>
+
+                <!-- Recent Report Card -->
+                <div class="citizen-card">
+                    <h3 class="card-title-section">Recent Report</h3>
+                    <div class="report-item">
+                        <div>
+                            <h4>Household Waste</h4>
+                            <p>FC Road, Shivajinagar</p>
+                        </div>
+                        <span class="status-badge in-progress">in progress</span>
+                    </div>
+                </div>
+
+                <!-- Community Updates Card -->
+                <div class="citizen-card">
+                    <h3 class="card-title-section">Community Updates</h3>
+                    
+                    <div class="update-block green-block">
+                        <h4>Cleanliness Drive</h4>
+                        <p>Join us this Saturday for community cleaning at Shaniwar Wada</p>
+                    </div>
+
+                    <div class="update-block blue-block">
+                        <h4>Schedule Update</h4>
+                        <p>Collection timings updated for Koregaon Park area</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Action Button -->
+            <button class="fab-btn">+</button>
+
+            <!-- Bottom Navigation -->
+            <nav class="bottom-nav">
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">❕</span>
+                    <span class="nav-label">Reports</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">🔔</span>
+                    <span class="nav-label">Feed</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- Worker Portal Container -->
+    <div id="workerPortal" class="portal-view" style="display: none;">
+        <header class="navbar">
+            <div class="logo"><span class="icon">👷</span> Worker Dashboard</div>
+            <button class="btn btn-secondary" onclick="closeAppPortal()">Logout</button>
+        </header>
+        <div class="portal-content">
+            <div class="map-container glass-card hover-glow">
+                <h3>Assigned Tasks & Navigation</h3>
+                <div id="workerMap" style="height: 400px; border-radius: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Portal Container -->
+    <div id="adminPortal" class="portal-view" style="display: none;">
+        <header class="navbar">
+            <div class="logo"><span class="icon">🖥️</span> Admin Command Center</div>
+            <button class="btn btn-secondary" onclick="closeAppPortal()">Logout</button>
+        </header>
+        <div class="portal-content">
+            <div class="map-container glass-card hover-glow">
+                <h3>City-Wide Audit & SLA Tracking</h3>
+                <div id="adminMap" style="height: 500px; border-radius: 10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Core and FCM -->
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-messaging-compat.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
